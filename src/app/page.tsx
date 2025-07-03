@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function Home() {
+  const [xTurn, setXTurn] = useState(true);
+  const [winner, setWinner] = useState<"x" | "o" | "draw" | null>(null);
+
   const [gameArray, setGameArray] = useState([
     "n",
     "n",
@@ -21,12 +24,38 @@ export default function Home() {
     setGameArray(["n", "n", "n", "n", "n", "n", "n", "n", "n"]);
   };
 
-  const buttonClick = (i) => {
-    setGameArray((prev) => {
-      const newArray = [...prev];
-      newArray[i] = "x";
-      return newArray;
-    });
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  const checkWinner = (board: string[]) => {
+    for (const combo of winningCombinations) {
+      const [a, b, c] = combo;
+      if (board[a] !== "n" && board[a] === board[b] && board[a] === board[c]) {
+        setWinner(board[a]); // return 'x' or 'o'
+      }
+    }
+
+    if (!board.includes("n")) {
+      return "draw";
+    }
+
+    return null;
+  };
+
+  const buttonClick = (i: number) => {
+    const newBoard = [...gameArray];
+    newBoard[i] = xTurn ? "X" : "O";
+    setGameArray(newBoard);
+    setXTurn(!xTurn);
+    checkWinner(newBoard);
   };
 
   return (
@@ -38,17 +67,20 @@ export default function Home() {
           </header>
           <section className="grid grid-cols-3 gap-3">
             {gameArray.map((el, i) => {
-              if (el === "n") {
+              if (el) {
                 return (
                   <Button
                     key={i}
                     className="bg-amber-400 rounded-md size-16"
                     onClick={() => buttonClick(i)}
-                  ></Button>
+                  >
+                    {el === "X" ? "X" : el === "O" ? "O" : ""}
+                  </Button>
                 );
               }
             })}
           </section>
+          <div>Winner: {winner}</div>
         </div>
       </section>
     </>
