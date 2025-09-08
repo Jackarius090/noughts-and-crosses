@@ -22,6 +22,7 @@ export default function Home() {
 
   const MakeNewGame = () => {
     setGameArray(["n", "n", "n", "n", "n", "n", "n", "n", "n"]);
+    setWinner(null);
   };
 
   const winningCombinations = [
@@ -80,7 +81,10 @@ export default function Home() {
               }
             })}
           </section>
-          <div>Winner: {winner}</div>
+          <section className="py-4">
+            <div>{winner ? `Winner: ${winner}` : ""}</div>
+            <Button onClick={MakeNewGame}>Reset</Button>
+          </section>
         </div>
       </section>
     </>
