@@ -72,8 +72,9 @@ export default function Home() {
                 return (
                   <Button
                     key={i}
-                    className="bg-amber-400 rounded-md size-16"
+                    className="bg-amber-400 rounded-md size-16 disabled:opacity-100"
                     onClick={() => buttonClick(i)}
+                    disabled={el === "X" || el === "O"}
                   >
                     {el === "X" ? "X" : el === "O" ? "O" : ""}
                   </Button>
